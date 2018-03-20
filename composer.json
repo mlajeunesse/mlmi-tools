@@ -1,8 +1,8 @@
 {
     "name": "mlajeunesse/mlmi-tools",
     "description": "Outils MLMI pour Wordpress.",
-	"version": "1.2.2",
-    "type": "plugin",
+	"version": "1.2.3",
+    "type": "wordpress-plugin",
     "authors": [
         {
             "name": "Mathieu Lajeunesse",
