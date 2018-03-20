@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Outils MLMI
  * Plugin URI: http://mathieulajeunesse.com
- * Description: Outils de configuration de Wordpress par Mathieu Lajeunesse médias interactifs. Mis à jour pour la version 2017 de Wordpress.
- * Version: 1.2.1
+ * Description: Outils de configuration de Wordpress par Mathieu Lajeunesse médias interactifs. Mis à jour pour la version 2018 de Wordpress / Bedrock.
+ * Version: 1.2.4
  * Author: Mathieu Lajeunesse
  * Author URI: http://mathieulajeunesse.com
  * Text Domain: mlmi-tools
@@ -32,7 +32,7 @@ function mlmi_tools_init()
 	remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
 
 	// protect website with login form
-	if (BLOCK_WEBSITE && !is_user_logged_in() && !mlmi_tools_is_login_page()){
+	if (defined('BLOCK_WEBSITE') && BLOCK_WEBSITE && !is_user_logged_in() && !mlmi_tools_is_login_page()){
 		$redirect_url = esc_url(wp_login_url());
 		wp_safe_redirect($redirect_url."?redirect_to=".$_SERVER['REQUEST_URI']);
 		exit;
@@ -60,13 +60,13 @@ function mlmi_tools_add_rewrites($content)
 	$stylesheet_directory = explode('/themes/', get_stylesheet_directory());
 	$theme_name = next($stylesheet_directory);
 	$new_rules = array(
-		'css/(.*)'		=> 'wp-content/themes/'.$theme_name.'/_/css/$1',
-		'js/(.*)'		=> 'wp-content/themes/'.$theme_name.'/_/js/$1',
-		'img/(.*)'		=> 'wp-content/themes/'.$theme_name.'/_/img/$1',
-		'lang/(.*)'		=> 'wp-content/themes/'.$theme_name.'/_/lang/$1',
-		'fonts/(.*)'	=> 'wp-content/themes/'.$theme_name.'/_/css/fonts/$1',
-		'mail/(.*)'		=> 'wp-content/themes/'.$theme_name.'/_/mail/$1',
-		'uploads/(.*)'	=> 'wp-content/uploads/$1'
+		'css/(.*)'		=> 'app/themes/'.$theme_name.'/_/css/$1',
+		'js/(.*)'		=> 'app/themes/'.$theme_name.'/_/js/$1',
+		'img/(.*)'		=> 'app/themes/'.$theme_name.'/_/img/$1',
+		'lang/(.*)'		=> 'app/themes/'.$theme_name.'/_/lang/$1',
+		'fonts/(.*)'	=> 'app/themes/'.$theme_name.'/_/css/fonts/$1',
+		'mail/(.*)'		=> 'app/themes/'.$theme_name.'/_/mail/$1',
+		'uploads/(.*)'	=> 'app/uploads/$1'
 	);
 	$wp_rewrite->non_wp_rules += $new_rules;
 }
@@ -99,7 +99,6 @@ add_filter('body_class', 'mlmi_tools_body_class');
 function mlmi_tools_admin_menu_custom()
 {
 	// remove unused pages from the admin menu
-	remove_submenu_page('tools.php', 'tools.php');
 	remove_submenu_page('themes.php', 'theme-editor.php');
 	remove_submenu_page('themes.php', 'customize.php?return='.urlencode($_SERVER['REQUEST_URI']));
 	remove_submenu_page('plugins.php', 'plugin-editor.php');
@@ -182,15 +181,5 @@ function log_dump($message){
 function is_login_page()
 {
 	return in_array($GLOBALS['pagenow'], array('wp-login.php', 'wp-register.php'));
-}
-
-// do not check for updates
-if (is_admin()){
-	include_once(ABSPATH.'wp-admin/includes/plugin.php');
-	if (is_plugin_active('disable-updates/disable-updates.php')){
-		remove_action('admin_init', '_maybe_update_core');
-		remove_action('admin_init', '_maybe_update_plugins');
-		remove_action('admin_init', '_maybe_update_themes');
-	}
 }
 ?>
