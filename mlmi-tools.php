@@ -3,7 +3,7 @@
  * Plugin Name: Outils MLMI
  * Plugin URI: http://mathieulajeunesse.com
  * Description: Outils de configuration de Wordpress par Mathieu Lajeunesse médias interactifs. Mis à jour pour la version 2018 de Wordpress / Bedrock.
- * Version: 1.3
+ * Version: 1.3.1
  * Author: Mathieu Lajeunesse
  * Author URI: http://mathieulajeunesse.com
  * Text Domain: mlmi-tools
@@ -60,12 +60,12 @@ function mlmi_tools_add_rewrites($content)
 	$stylesheet_directory = explode('/themes/', get_stylesheet_directory());
 	$theme_name = next($stylesheet_directory);
 	$new_rules = array(
-		'css/(.*)'		=> 'app/themes/'.$theme_name.'/_/css/$1',
-		'js/(.*)'		=> 'app/themes/'.$theme_name.'/_/js/$1',
-		'img/(.*)'		=> 'app/themes/'.$theme_name.'/_/img/$1',
-		'lang/(.*)'		=> 'app/themes/'.$theme_name.'/_/lang/$1',
-		'fonts/(.*)'	=> 'app/themes/'.$theme_name.'/_/css/fonts/$1',
-		'mail/(.*)'		=> 'app/themes/'.$theme_name.'/_/mail/$1',
+		'css/(.*)'		=> 'app/themes/'.$theme_name.'/assets/css/$1',
+		'js/(.*)'		=> 'app/themes/'.$theme_name.'/assets/js/$1',
+		'img/(.*)'		=> 'app/themes/'.$theme_name.'/assets/img/$1',
+		'lang/(.*)'		=> 'app/themes/'.$theme_name.'/assets/lang/$1',
+		'fonts/(.*)'	=> 'app/themes/'.$theme_name.'/assets/css/fonts/$1',
+		'mail/(.*)'		=> 'app/themes/'.$theme_name.'/assets/mail/$1',
 		'uploads/(.*)'	=> 'app/uploads/$1'
 	);
 	$wp_rewrite->non_wp_rules += $new_rules;
