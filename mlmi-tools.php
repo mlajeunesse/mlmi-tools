@@ -3,7 +3,7 @@
  * Plugin Name: Outils MLMI
  * Plugin URI: http://mathieulajeunesse.com
  * Description: Outils de configuration de Wordpress par Mathieu Lajeunesse médias interactifs. Mis à jour pour la version 2018 de Wordpress / Bedrock.
- * Version: 1.2.4
+ * Version: 1.3
  * Author: Mathieu Lajeunesse
  * Author URI: http://mathieulajeunesse.com
  * Text Domain: mlmi-tools
@@ -115,26 +115,11 @@ add_filter('show_admin_bar', 'mlmi_tools_admin_bar');
 // block dashboard for non-admins
 function mlmi_tools_block_admin_for_users()
 {
-	if (!current_user_can('manage_options') && (!defined('DOING_AJAX') || !DOING_AJAX)){
+	if (!current_user_can('administrator') && (!defined('DOING_AJAX') || !DOING_AJAX)){
 		wp_redirect(home_url()); exit;
 	}
 }
 add_action('admin_init', 'mlmi_tools_block_admin_for_users');
-
-// mime types
-function mlmi_mime_types($mimes)
-{
-  $mimes['svg'] = 'image/svg+xml';
-  return $mimes;
-}
-add_filter('upload_mimes', 'mlmi_mime_types');
-
-// set open graph type
-function mlmi_og_type($type)
-{
-    return 'website';
-}
-add_filter('wpseo_opengraph_type', 'mlmi_og_type', 10, 1);
 
 /**
 *	Functions and helpers
@@ -148,8 +133,8 @@ function pre($variable)
 	echo '</pre>';
 }
 
-// log
-function log($message, $type = 'echo')
+// log functions
+function mlmi_log($message, $type = 'echo')
 {
 	if (!defined('LOG_FILE')){
 		return false;
@@ -170,10 +155,10 @@ function log($message, $type = 'echo')
 		error_log(date('[Y-m-d H:i:s] '). $message.PHP_EOL, 3, LOG_FILE);
 	}
 }
-function log_pre($message){
+function mlmi_log_pre($message){
 	log($message, 'pre');
 }
-function log_dump($message){
+function mlmi_log_dump($message){
 	log($message, 'dump');
 }
 
