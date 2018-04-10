@@ -1,2 +1,2 @@
 # Outils MLMI
-Outils pour Wordpress.
+Outils standardisés de **Mathieu Lajeunesse médias interactifs** pour Wordpress.
