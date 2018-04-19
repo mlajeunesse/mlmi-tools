@@ -3,7 +3,7 @@
  * Plugin Name: Outils MLMI
  * Plugin URI: http://mathieulajeunesse.com
  * Description: Outils de configuration de Wordpress par Mathieu Lajeunesse médias interactifs. Mis à jour pour la version 2018 de Wordpress / Bedrock.
- * Version: 1.3.6
+ * Version: 1.3.7
  * Author: Mathieu Lajeunesse
  * Author URI: http://mathieulajeunesse.com
  * Text Domain: mlmi-tools
@@ -32,7 +32,7 @@ function mlmi_tools_init()
 	remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
 
 	// protect website with login form
-	if (defined('BLOCK_WEBSITE') && BLOCK_WEBSITE && !is_user_logged_in() && !is_login_page()){
+	if (defined('BLOCK_WEBSITE') && BLOCK_WEBSITE && !is_user_logged_in() && !is_login_page() && !mlmi_has_allowed_action()){
 		$redirect_url = esc_url(wp_login_url());
 		wp_safe_redirect($redirect_url."?redirect_to=".$_SERVER['REQUEST_URI']);
 		exit;
@@ -187,5 +187,23 @@ if (is_admin()){
 		remove_action('admin_init', '_maybe_update_plugins');
 		remove_action('admin_init', '_maybe_update_themes');
 	}
+}
+
+// allowed actions
+function mlmi_has_allowed_action()
+{
+	if (isset($_POST['action']) && $_POST['action'] == "wpsdb_verify_connection_to_remote_site" && isset($_POST['intent']) && $_POST['intent'] == "pull"){
+		return true;
+	}
+	if (isset($_POST['action']) && $_POST['action'] == "wpsdb_remote_initiate_migration" && isset($_POST['intent']) && $_POST['intent'] == "pull"){
+		return true;
+	}
+	if (isset($_POST['action']) && $_POST['action'] == "wpsdb_process_pull_request" && isset($_POST['intent']) && $_POST['intent'] == "pull"){
+		return true;
+	}
+	if (isset($_POST['action']) && $_POST['action'] == "wpsdb_fire_migration_complete"){
+		return true;
+	}
+	return false;
 }
 ?>
