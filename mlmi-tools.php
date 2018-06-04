@@ -3,7 +3,7 @@
  * Plugin Name: Outils MLMI
  * Plugin URI: http://mathieulajeunesse.com
  * Description: Outils de configuration de Wordpress par Mathieu Lajeunesse médias interactifs. Mis à jour pour la version 2018 de Wordpress / Bedrock.
- * Version: 1.3.7
+ * Version: 1.3.8
  * Author: Mathieu Lajeunesse
  * Author URI: http://mathieulajeunesse.com
  * Text Domain: mlmi-tools
@@ -192,17 +192,16 @@ if (is_admin()){
 // allowed actions
 function mlmi_has_allowed_action()
 {
-	if (isset($_POST['action']) && $_POST['action'] == "wpsdb_verify_connection_to_remote_site" && isset($_POST['intent']) && $_POST['intent'] == "pull"){
-		return true;
-	}
-	if (isset($_POST['action']) && $_POST['action'] == "wpsdb_remote_initiate_migration" && isset($_POST['intent']) && $_POST['intent'] == "pull"){
-		return true;
-	}
-	if (isset($_POST['action']) && $_POST['action'] == "wpsdb_process_pull_request" && isset($_POST['intent']) && $_POST['intent'] == "pull"){
-		return true;
-	}
-	if (isset($_POST['action']) && $_POST['action'] == "wpsdb_fire_migration_complete"){
-		return true;
+	if (isset($_POST['action'])){
+		switch ($_POST['action']) {
+			case 'wpsdb_verify_connection_to_remote_site':
+			case 'wpsdb_remote_initiate_migration':
+			case 'wpsdb_process_pull_request':
+			case 'wpsdb_fire_migration_complete':
+			case 'wpsdb_backup_remote_table':
+			case 'wpsdb_remote_finalize_migration':
+				return true;
+		}
 	}
 	return false;
 }
