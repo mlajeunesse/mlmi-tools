@@ -80,7 +80,7 @@ add_filter('body_class', function($classes = '') {
 /*
 *	Clean up admin menu
 */
-add_action('admin_menu', function mlmi_tools_admin_menu_custom() {
+add_action('admin_menu', function() {
 	remove_submenu_page('themes.php', 'themes.php');
 	remove_submenu_page('themes.php', 'theme-editor.php');
 	remove_submenu_page('themes.php', 'customize.php?return='.urlencode($_SERVER['REQUEST_URI']));
