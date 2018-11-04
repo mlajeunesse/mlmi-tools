@@ -3,7 +3,7 @@
 * Plugin Name: Outils MLMI
 * Plugin URI: https://mathieulajeunesse.com
 * Description: Outils de configuration de Wordpress par Mathieu Lajeunesse médias interactifs. Mis à jour pour la version 2018 de Wordpress / Bedrock.
-* Version: 1.4.1
+* Version: 1.4.2
 * Author: Mathieu Lajeunesse
 * Author URI: https://mathieulajeunesse.com
 * Text Domain: mlmi-tools
@@ -235,7 +235,7 @@ function has_allowed_action() {
 		'wpsdbmf_determine_media_to_migrate',
 		'wpsdbmf_get_remote_media_listing',
 		'wpsdbmf_migrate_media'
-	)
+	);
 	$has_allowed_action = (isset($_POST['action']) && in_array($allowed_actions, $_POST['action']));
 	return apply_filters('has_allowed_action', $has_allowed_action);
 }
