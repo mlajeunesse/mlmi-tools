@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name: Outils MLMI
- * Plugin URI: https://mathieulajeunesse.com
- * Description: Outils de configuration de Wordpress par Mathieu Lajeunesse médias interactifs. Mis à jour pour la version 2018 de Wordpress / Bedrock.
- * Version: 1.4.0
- * Author: Mathieu Lajeunesse
- * Author URI: https://mathieulajeunesse.com
- * Text Domain: mlmi-tools
- */
+* Plugin Name: Outils MLMI
+* Plugin URI: https://mathieulajeunesse.com
+* Description: Outils de configuration de Wordpress par Mathieu Lajeunesse médias interactifs. Mis à jour pour la version 2018 de Wordpress / Bedrock.
+* Version: 1.4.0
+* Author: Mathieu Lajeunesse
+* Author URI: https://mathieulajeunesse.com
+* Text Domain: mlmi-tools
+*/
 
 /*
 *	Basic configuration
@@ -28,7 +28,7 @@ add_action('init', function() {
 	remove_filter('oembed_dataparse', 'wp_filter_oembed_result', 10);
 	remove_action('wp_head', 'rest_output_link_wp_head', 10);
 	remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
-
+	
 	/* Protect website using login form */
 	if (defined('BLOCK_WEBSITE') && BLOCK_WEBSITE && !is_user_logged_in() && !is_login_page() && !mlmi_has_allowed_action()) {
 		$redirect_url = esc_url(wp_login_url());
@@ -181,14 +181,14 @@ function mlmi_log($message, $type = 'echo') {
 	} else if ($type == 'pre' || $type == "print_r") {
 		ob_start();
 		print_r($message);
-   		$message = ob_get_contents();
-   		ob_end_clean();
+		$message = ob_get_contents();
+		ob_end_clean();
 		error_log(date('[Y-m-d H:i:s] '). $message.PHP_EOL, 3, LOG_FILE);
 	} else if ($type == 'dump' || $type == 'var_dump') {
 		ob_start();
 		var_dump($message);
-   		$message = ob_get_contents();
-   		ob_end_clean();
+		$message = ob_get_contents();
+		ob_end_clean();
 		error_log(date('[Y-m-d H:i:s] '). $message.PHP_EOL, 3, LOG_FILE);
 	}
 }
@@ -201,7 +201,8 @@ function mlmi_log_dump($message) {
 
 // is login page
 function is_login_page() {
-	return in_array($GLOBALS['pagenow'], array('wp-login.php', 'wp-register.php'));
+	$is_login_page = in_array($GLOBALS['pagenow'], array('wp-login.php', 'wp-register.php'));
+	return apply_filters('is_login_page', $is_login_page);
 }
 
 // do not check for updates
@@ -226,8 +227,9 @@ function mlmi_has_allowed_action() {
 			case 'wpsdb_remote_finalize_migration':
 			case 'wpsdbmf_determine_media_to_migrate':
 			case 'wpsdbmf_get_remote_media_listing':
-			case 'wpsdbmf_migrate_media':
+			case 'wpsdbmf_migrate_media': {
 				return true;
+			}
 		}
 	}
 	return false;
