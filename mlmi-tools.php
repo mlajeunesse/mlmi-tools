@@ -30,7 +30,7 @@ add_action('init', function() {
 	remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
 	
 	/* Protect website using login form */
-	if (defined('BLOCK_WEBSITE') && BLOCK_WEBSITE && !is_user_logged_in() && !is_login_page() && !mlmi_has_allowed_action()) {
+	if (defined('BLOCK_WEBSITE') && BLOCK_WEBSITE && !is_user_logged_in() && !is_login_page() && !has_allowed_action()) {
 		$redirect_url = esc_url(wp_login_url());
 		wp_safe_redirect($redirect_url."?redirect_to=".$_SERVER['REQUEST_URI']);
 		exit;
@@ -89,6 +89,18 @@ add_action('admin_menu', function() {
 }, PHP_INT_MAX);
 
 /*
+*	Do not check for updates
+*/
+if (is_admin()) {
+	include_once(ABSPATH.'wp-admin/includes/plugin.php');
+	if (is_plugin_active('disable-updates/disable-updates.php')) {
+		remove_action('admin_init', '_maybe_update_core');
+		remove_action('admin_init', '_maybe_update_plugins');
+		remove_action('admin_init', '_maybe_update_themes');
+	}
+}
+
+/*
 *	Hide admin bar
 */
 add_filter('show_admin_bar', function() {
@@ -110,7 +122,6 @@ add_action('admin_init', function() {
 add_filter('excerpt_more', function($more) {
 	return '...';
 });
-
 
 /*
 * Replace hard coded URLs in content
@@ -160,18 +171,18 @@ add_filter('acf/load_value', function($field_value) {
 	return $field_value;
 });
 
-/**
-*	Functions and helpers
+/*
+*	Print preformatted text
 */
-
-// print preformatted text
 function pre($variable) {
 	echo '<pre>';
 	print_r($variable);
 	echo '</pre>';
 }
 
-// log functions
+/* 
+*	Log functions
+*/
 function mlmi_log($message, $type = 'echo') {
 	if (!defined('LOG_FILE')) {
 		return false;
@@ -199,38 +210,32 @@ function mlmi_log_dump($message) {
 	log($message, 'dump');
 }
 
-// is login page
+/*
+*	Check if is login page
+*/
 function is_login_page() {
 	$is_login_page = in_array($GLOBALS['pagenow'], array('wp-login.php', 'wp-register.php'));
 	return apply_filters('is_login_page', $is_login_page);
 }
 
-// do not check for updates
-if (is_admin()) {
-	include_once(ABSPATH.'wp-admin/includes/plugin.php');
-	if (is_plugin_active('disable-updates/disable-updates.php')) {
-		remove_action('admin_init', '_maybe_update_core');
-		remove_action('admin_init', '_maybe_update_plugins');
-		remove_action('admin_init', '_maybe_update_themes');
-	}
-}
-
-// allowed actions
-function mlmi_has_allowed_action() {
-	if (isset($_POST['action'])) {
-		switch ($_POST['action']) {
-			case 'wpsdb_verify_connection_to_remote_site':
-			case 'wpsdb_remote_initiate_migration':
-			case 'wpsdb_process_pull_request':
-			case 'wpsdb_fire_migration_complete':
-			case 'wpsdb_backup_remote_table':
-			case 'wpsdb_remote_finalize_migration':
-			case 'wpsdbmf_determine_media_to_migrate':
-			case 'wpsdbmf_get_remote_media_listing':
-			case 'wpsdbmf_migrate_media': {
-				return true;
-			}
-		}
-	}
-	return false;
+/*
+*	Check for allowed action
+*/
+function has_allowed_action() {
+	$allowed_actions = array(
+		/* WP Sync DB */
+		'wpsdb_verify_connection_to_remote_site',
+		'wpsdb_remote_initiate_migration',
+		'wpsdb_process_pull_request',
+		'wpsdb_fire_migration_complete',
+		'wpsdb_backup_remote_table',
+		'wpsdb_remote_finalize_migration',
+		
+		/* WP Sync DB Media Files */
+		'wpsdbmf_determine_media_to_migrate',
+		'wpsdbmf_get_remote_media_listing',
+		'wpsdbmf_migrate_media'
+	)
+	$has_allowed_action = (isset($_POST['action']) && in_array($allowed_actions, $_POST['action']));
+	return apply_filters('has_allowed_action', $has_allowed_action);
 }
