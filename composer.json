@@ -1,7 +1,7 @@
 {
   "name": "mlajeunesse/mlmi-tools",
   "description": "Outils MLMI pour Wordpress.",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "type": "wordpress-plugin",
   "authors": [
     {
