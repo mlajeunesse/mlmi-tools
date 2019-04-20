@@ -1,12 +1,12 @@
 <?php
 /**
-* Plugin Name: Outils MLMI
-* Plugin URI: https://mathieulajeunesse.com
-* Description: Outils de configuration de Wordpress par Mathieu Lajeunesse médias interactifs. Mis à jour pour la version 2018 de Wordpress / Bedrock.
-* Version: 1.5.1
-* Author: Mathieu Lajeunesse
-* Author URI: https://mathieulajeunesse.com
-* Text Domain: mlmi-tools
+*	Plugin Name: Outils MLMI
+*	Plugin URI: https://mathieulajeunesse.com
+*	Description: Outils de configuration de Wordpress par Mathieu Lajeunesse médias interactifs. Mis à jour pour la version 2019 de Wordpress / Bedrock.
+*	Version: 1.5.2
+*	Author: Mathieu Lajeunesse
+*	Author URI: https://mathieulajeunesse.com
+*	Text Domain: mlmi-tools
 */
 
 /*
@@ -56,36 +56,36 @@ add_action('after_setup_theme', function() {
 });
 
 /*
-* Remove support for Gutenberg styles
+*	Remove support for Gutenberg styles
 */
 add_action('wp_enqueue_scripts', function() {
   wp_dequeue_style('wp-block-library');
 });
 
 /*
-* Rewrites in .htaccess
+*	Rewrites in .htaccess
 */
 add_action('generate_rewrite_rules', function($content) {
   global $wp_rewrite;
   $stylesheet_directory = explode('/themes/', get_template_directory());
   $theme_name = next($stylesheet_directory);
   $new_rules = array(
-    'css/(.*)'				=> 'app/themes/'.$theme_name.'/assets/css/$1',
-    'js/(.*)'					=> 'app/themes/'.$theme_name.'/assets/js/$1',
-    'img/(.*)'				=> 'app/themes/'.$theme_name.'/assets/img/$1',
-    'lang/(.*)'				=> 'app/themes/'.$theme_name.'/assets/lang/$1',
-    'font/(.*)'				=> 'app/themes/'.$theme_name.'/assets/font/$1',
-    'mail/(.*)'				=> 'app/themes/'.$theme_name.'/assets/mail/$1',
-    'video/(.*)'			=> 'app/themes/'.$theme_name.'/assets/video/$1',
-    'assets/(.*)'			=> 'app/themes/'.$theme_name.'/assets/$1',
-    'wp-content/(.*)'	=> 'app/$1',
-    'uploads/(.*)'		=> 'app/uploads/$1'
+    'css/(.*)' => 'app/themes/'.$theme_name.'/assets/css/$1',
+    'js/(.*)' => 'app/themes/'.$theme_name.'/assets/js/$1',
+    'img/(.*)' => 'app/themes/'.$theme_name.'/assets/img/$1',
+    'lang/(.*)' => 'app/themes/'.$theme_name.'/assets/lang/$1',
+    'font/(.*)' => 'app/themes/'.$theme_name.'/assets/font/$1',
+    'mail/(.*)' => 'app/themes/'.$theme_name.'/assets/mail/$1',
+    'video/(.*)' => 'app/themes/'.$theme_name.'/assets/video/$1',
+    'assets/(.*)' => 'app/themes/'.$theme_name.'/assets/$1',
+    'wp-content/(.*)' => 'app/$1',
+    'uploads/(.*)' => 'app/uploads/$1'
   );
   $wp_rewrite->non_wp_rules += $new_rules;
 });
 
 /*
-* Add post name to body class
+*	Add post name to body class
 */
 add_filter('body_class', function($classes = '') {
   global $post;
@@ -111,7 +111,7 @@ add_action('admin_menu', function() {
 }, PHP_INT_MAX);
 
 /*
-* Cleanup dashboard
+*	Cleanup dashboard
 */
 add_action('wp_dashboard_setup', function() {
   global $wp_meta_boxes;
@@ -173,7 +173,7 @@ add_filter('excerpt_more', function($more) {
 });
 
 /*
-* Replace hard coded URLs in content
+*	Replace hard coded URLs in content
 */
 add_filter('inline_urls', function($content) {
   $hosts = array(
@@ -187,7 +187,7 @@ add_filter('inline_urls', function($content) {
 });
 
 /*
-* Inline spaces
+*	Inline spaces
 */
 add_filter('inline_spaces', function($content) {
   $content = str_replace(" :", "&nbsp;:", $content);
@@ -203,7 +203,7 @@ add_filter('inline_spaces', function($content) {
 });
 
 /*
-* Add content filters to Wordpress content
+*	Add content filters to Wordpress content
 */
 add_filter('the_content', function($content) {
   $content = apply_filters('inline_urls', $content);
@@ -212,7 +212,7 @@ add_filter('the_content', function($content) {
 });
 
 /*
-* Add content filters to ACF content
+*	Add content filters to ACF content
 */
 add_filter('acf/load_value', function($field_value) {
   $field_value = apply_filters('inline_urls', $field_value);
@@ -292,7 +292,7 @@ function has_allowed_action() {
     'wpsdb_fire_migration_complete',
     'wpsdb_backup_remote_table',
     'wpsdb_remote_finalize_migration',
-
+    
     /* WP Sync DB Media Files */
     'wpsdbmf_determine_media_to_migrate',
     'wpsdbmf_get_remote_media_listing',
