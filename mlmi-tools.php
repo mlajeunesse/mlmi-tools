@@ -3,7 +3,7 @@
 *	Plugin Name: Outils MLMI
 *	Plugin URI: https://mathieulajeunesse.com
 *	Description: Outils de configuration de Wordpress par Mathieu Lajeunesse médias interactifs. Mis à jour pour la version 2019 de Wordpress / Bedrock.
-*	Version: 1.5.2
+*	Version: 1.5.3
 *	Author: Mathieu Lajeunesse
 *	Author URI: https://mathieulajeunesse.com
 *	Text Domain: mlmi-tools
@@ -301,3 +301,10 @@ function has_allowed_action() {
   $has_allowed_action = (isset($_POST['action']) && in_array($allowed_actions, $_POST['action']));
   return apply_filters('has_allowed_action', $has_allowed_action);
 }
+
+/*
+* ACF WPML
+*/
+add_filter('wpml_custom_field_original_data', function() {
+  return false;
+});
