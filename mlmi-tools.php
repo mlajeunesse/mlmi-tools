@@ -3,7 +3,7 @@
 *	Plugin Name: Outils MLMI
 *	Plugin URI: https://mathieulajeunesse.com
 *	Description: Outils de configuration de Wordpress par Mathieu Lajeunesse médias interactifs. Mis à jour pour la version 2019 de Wordpress / Bedrock.
-*	Version: 1.5.3
+*	Version: 1.5.4
 *	Author: Mathieu Lajeunesse
 *	Author URI: https://mathieulajeunesse.com
 *	Text Domain: mlmi-tools
@@ -131,17 +131,17 @@ add_action('wp_dashboard_setup', function() {
 /*
 *	Do not check for updates
 */
+$mlmi_check_for_updates = true;
 if (is_admin()) {
-  $check_for_updates = true;
   if (defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS == true) {
-    $check_for_updates = false;
+    $mlmi_check_for_updates = false;
   } else {
     include_once(ABSPATH.'wp-admin/includes/plugin.php');
     if (is_plugin_active('disable-updates/disable-updates.php')) {
-      $check_for_updates = false;
+      $mlmi_check_for_updates = false;
     }
   }
-  if ($check_for_updates === false) {
+  if ($mlmi_check_for_updates === false) {
     remove_action('admin_init', '_maybe_update_core');
     remove_action('admin_init', '_maybe_update_plugins');
     remove_action('admin_init', '_maybe_update_themes');
@@ -162,6 +162,12 @@ add_action('admin_init', function() {
   /* Block dashboard for non admin */
   if ((!current_user_can('administrator') && !current_user_can('editor')) && (!defined('DOING_AJAX') || !DOING_AJAX) && !isset($_REQUEST['action'])) {
     wp_redirect(home_url()); exit;
+  }
+  
+  /* Remove Wordpress update nag */
+  global $mlmi_check_for_updates;
+  if ($mlmi_check_for_updates == false) {
+  	remove_action('admin_notices', 'update_nag', 3);
   }
 }, 1);
 
